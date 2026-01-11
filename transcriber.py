@@ -4,6 +4,7 @@
 import io
 import logging
 import signal
+import subprocess
 import sys
 import tempfile
 import threading
@@ -20,8 +21,14 @@ from PyQt6.QtGui import QAction, QIcon, QPixmap
 from PyQt6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 from scipy.io import wavfile
 
+# Платформа
+IS_MAC = sys.platform == "darwin"
+
 # Логирование
-LOG_DIR = Path.home() / ".local/share/gigaam-transcriber"
+if IS_MAC:
+    LOG_DIR = Path.home() / "Library/Application Support/gigaam-transcriber"
+else:
+    LOG_DIR = Path.home() / ".local/share/gigaam-transcriber"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
@@ -56,17 +63,21 @@ def create_icon(color: str) -> Image.Image:
 
 def paste_text(text: str) -> None:
     """Вставляет текст через буфер обмена."""
-    import subprocess
-
     old_clipboard = pyperclip.paste()
     pyperclip.copy(text)
-    time.sleep(0.1)  # ждём пока буфер обновится
+    time.sleep(0.1)
 
-    result = subprocess.run(["xdotool", "getactivewindow"], capture_output=True, text=True, timeout=1)
-    if result.returncode == 0:
-        subprocess.run(["xdotool", "key", "--window", result.stdout.strip(), "ctrl+v"], timeout=2)
-        time.sleep(0.3)  # ждём пока вставится
+    if IS_MAC:
+        subprocess.run([
+            "osascript", "-e",
+            'tell application "System Events" to keystroke "v" using command down'
+        ], timeout=2)
+    else:
+        result = subprocess.run(["xdotool", "getactivewindow"], capture_output=True, text=True, timeout=1)
+        if result.returncode == 0:
+            subprocess.run(["xdotool", "key", "--window", result.stdout.strip(), "ctrl+v"], timeout=2)
 
+    time.sleep(0.3)
     pyperclip.copy(old_clipboard)
     log(f"✓ Вставлено: {len(text)} символов")
 

@@ -9,34 +9,43 @@
 - Поддержка длинных записей — автоматическое разбиение на чанки по 20 секунд
 - Автоматическая вставка текста в место курсора
 - Визуальная индикация состояния цветом иконки
-- Автозапуск при входе в систему
+- Кроссплатформенность: Linux и macOS
 
 ## Требования
 
-- Linux (Fedora, Ubuntu, etc.)
 - Python 3.10+
-- xdotool
 - Микрофон
+
+### Linux
+- xdotool
+
+### macOS
+- Разрешение на Accessibility в System Preferences → Security & Privacy → Privacy → Accessibility
 
 ## Установка
 
 ### 1. Системные зависимости
 
-Fedora/RHEL:
+**Fedora/RHEL:**
 ```bash
 sudo dnf install xdotool portaudio-devel
 ```
 
-Ubuntu/Debian:
+**Ubuntu/Debian:**
 ```bash
 sudo apt install xdotool portaudio19-dev
+```
+
+**macOS:**
+```bash
+brew install portaudio
 ```
 
 ### 2. Установка uv
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
-source ~/.bashrc
+source ~/.bashrc  # или source ~/.zshrc на macOS
 ```
 
 ### 3. Клонирование и запуск
@@ -50,7 +59,7 @@ uv run transcriber.py
 
 Первый запуск займёт время (~500MB) — скачивается PyTorch и модель GigaAM.
 
-### 4. Автозапуск (опционально)
+### 4. Автозапуск (опционально, только Linux)
 
 ```bash
 bash install_autostart.sh
@@ -70,8 +79,14 @@ bash install_autostart.sh
 
 ## Логи
 
+**Linux:**
 ```bash
 tail -f ~/.local/share/gigaam-transcriber/transcriber.log
+```
+
+**macOS:**
+```bash
+tail -f ~/Library/Application\ Support/gigaam-transcriber/transcriber.log
 ```
 
 ## Лицензия
