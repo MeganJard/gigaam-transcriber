@@ -1,0 +1,35 @@
+[project]
+name = "gigaam-transcriber"
+version = "1.0.0"
+description = "Приложение для голосового ввода текста с GigaAM v3"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "GigaAM Transcriber Contributors"}
+]
+
+dependencies = [
+    "torch",
+    "torchaudio",
+    "gigaam @ git+https://github.com/salute-developers/GigaAM.git",
+    "PyQt6",
+    "Pillow",
+    "sounddevice",
+    "numpy",
+    "scipy",
+    "pynput",
+    "pyperclip",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/gigaam-transcriber"
+Repository = "https://github.com/your-username/gigaam-transcriber"
+Issues = "https://github.com/your-username/gigaam-transcriber/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
