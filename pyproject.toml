@@ -3,7 +3,7 @@ name = "gigaam-transcriber"
 version = "1.0.0"
 description = "Приложение для голосового ввода текста с GigaAM v3"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
     {name = "GigaAM Transcriber Contributors"}
@@ -11,25 +11,38 @@ authors = [
 
 dependencies = [
     "torch",
-    "torchaudio",
     "gigaam @ git+https://github.com/salute-developers/GigaAM.git",
     "PyQt6",
     "Pillow",
     "sounddevice",
     "numpy",
     "scipy",
-    "pynput",
     "pyperclip",
 ]
 
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
 [project.urls]
-Homepage = "https://github.com/your-username/gigaam-transcriber"
-Repository = "https://github.com/your-username/gigaam-transcriber"
-Issues = "https://github.com/your-username/gigaam-transcriber/issues"
+Homepage = "https://github.com/MeganJard/gigaam-transcriber"
+Repository = "https://github.com/MeganJard/gigaam-transcriber"
+Issues = "https://github.com/MeganJard/gigaam-transcriber/issues"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.uv]
-dev-dependencies = []
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+only-include = ["transcriber.py"]
+
+[dependency-groups]
+dev = []
